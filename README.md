@@ -1,7 +1,7 @@
 # Sicarius-Portfolio
 
-Video Link : https://youtu.be/z4qN8cH2Qo4
-프로젝트 링크 : https://github.com/Naezan/Sicarius
+비디오 링크 : https://youtu.be/z4qN8cH2Qo4  
+프로젝트 링크 : https://github.com/Naezan/Sicarius  
 
 - 프로젝트 정보
   - 
@@ -22,26 +22,26 @@ Video Link : https://youtu.be/z4qN8cH2Qo4
 
 <a name="top"></a>
 ## 구현목록
+(목록을 클릭하면 해당 위치로 이동합니다.)
 
 > 1. [CharacterMovementComponent](#cmc)
 > 2. [AbilitySystemComponent](#asc)  
->    2.3 [던지기 어빌리티](#throwability)  
->    2.4 [공격 어빌리티와 후방 암살(뒷잡)](#attackability)  
->    2.5 [상호작용 어빌리티](#interactability)  
->    2.6 [점프암살 어빌리티](#jumpassassinability)  
->    2.7 [데미지 상호작용](#damage-interaction)  
-> 3. [InventorySystem](#inventory)  
-> 6. [AI](#ai)  
->    6.5 [AIPerception Age](#perception-age)  
->	 6.6 [SmartObject 탐색](#smart-object)  
-> 7. [OSS Steam](#oss-steam)  
->	 7.1 [멀티 세션의 구조 설계](#멀티세션-구조설계)  
->	 7.2 [로비와 게임의 게임모드 분리](#게임모드-분리)  
-> 8. [Spectator](#spectator)  
->	 8.1 [관전 입력](#관전-입력)  
->	 8.2 [관전자 전환](#관전자-전환)  
->	 8.3 [리스폰](#리스폰)  
-> 9. [Extra : LineTracing Attack](#linetracing-attack)
+>    2.1 [던지기 어빌리티](#throwability)  
+>    2.2 [공격 어빌리티와 후방 암살(뒷잡)](#attackability)  
+>    2.3 [상호작용 어빌리티](#interactability)  
+>    2.4 [점프암살 어빌리티](#jumpassassinability)  
+>    2.5 [데미지 상호작용](#damage-interaction)  
+> 3. [InventorySystem](#inventory)
+> 4. [AI](#ai)  
+>    4.1 [AIPerception Age](#perception-age)  
+> 5. [OSS Steam](#oss-steam)  
+>    5.1 [멀티 세션의 구조 설계](#session-structure)  
+>    5.2 [로비와 게임의 게임모드 분리](#segregate-sessionmode)  
+> 6. [Spectator](#spectator)  
+>    6.1 [관전 입력](#관전-입력)  
+>    6.2 [관전자 전환](#관전자-전환)  
+>    6.3 [리스폰](#리스폰)  
+> 7. [Extra : LineTracing Attack](#linetracing-attack)
 
 
 <a name="cmc"></a>
@@ -152,10 +152,9 @@ RepeatTask = UAbilityTask_Repeat::RepeatAction(this, 0.1f, 50);
 
 인벤토리의 아이템은 삭제와 추가가 빈번하게 일어날 수 있고 중간에서 삭제, 추가될수도있습니다.
 
-시카리우스에서 인벤토리는 인덱스를 통해 UI에서 접근할수도 있어야 했습니다.
-그래서 인덱스 접근이 빠른 TArray로 구현하였습니다.
+제 게임에는 아이템의 DB가 방대하지 않아 TMap으로 관리했을때의 오버헤드를 고려하여 인벤토리는 인덱스를 통해 빠른 접근이 가능한 TArray로 구현하였습니다.
 
-장착 함수들은 서버를 통해서 진행되며 기존의 장비체크 후 장착해제, 해제한 슬롯에 장착할 장비를 착용합니다.
+인벤토리의 아이템 장착 함수는 서버를 통해서 진행되며 기존의 장비체크 후 장착해제, 그리고 해제한 슬롯에 장착할 장비를 착용합니다.
 
  - USrEquipmentSlotComponent.h
 ```cpp
@@ -198,6 +197,11 @@ void USrEquipmentSlotComponent::SetCurrentSlotItem_Implementation(int32 SlotInde
 `탐색상태`의 경우 자체적으로 트리거되지 않으며 무조건 `공격상태`를 거쳐서 진행됩니다.
 `탐색상태`는 **SmartObject**를 이용하여 주변 오브젝트를 탐색하도록 구현하였습니다.
 
+**SmartObject**
+
+언리얼 엔진에서는 `AI`와 플레이어의 상호작용에 `SmartObject`라는 최신 기술이 존재합니다.
+이 기술은 `GameplayTag`로 동작하는데, 이를 통해 AI의 상호작용을 의존성을 최소화하여 구현할 수 있습니다.
+
 **[⬆ Back to Top](#top)**
 
 <a name="perception-age"></a>
@@ -220,19 +224,10 @@ void USrAIPerceptionComponent::HandleExpiredStimulus(FAIStimulus& StimulusStore)
 
 **[⬆ Back to Top](#top)**
 
-<a name="smart-object"></a>
-### SmartObject
-
-언리얼 엔진에서는 `AI`와 플레이어의 상호작용에 `SmartObject`라는 최신 기술이 존재합니다.
-
-이 기술은 `GameplayTag`로 동작하는데, 이를 통해 AI의 상호작용을 의존성을 최소화하여 구현하였습니다.
-
-**[⬆ Back to Top](#top)**
-
 <a name="oss-steam"></a>
 ## OSS Steam
 
-<a name="멀티세션-구조설계"></a>
+<a name="session-structure"></a>
 ### 멀티 세션의 구조 설계
 
 `멀티 세션 시스템`은 단순히 현재 프로젝트에만 사용하는데 그치지 않고 **범용적으로 사용**할 수 있도록 `플러그인`의 형태로 구현하였습니다.
@@ -241,7 +236,9 @@ void USrAIPerceptionComponent::HandleExpiredStimulus(FAIStimulus& StimulusStore)
 
  > OnlineGameInstanceSubsystem에 의존하고 있는 객체들
 
-<a name="게임모드-분리"></a>
+**[⬆ Back to Top](#top)**
+
+<a name="segregate-sessionmode"></a>
 ### 로비와 게임의 게임모드 분리
 
 실제 게임에서 사용하는 게임모드와는 별개로 **Lobby**에 들어왔을때는 **게임의 로직과는 다른 구조로 로직이 구성되기 때문**에 세션게임모드와 컨트롤러를 별개로 생성하여 관리했습니다.
@@ -318,6 +315,6 @@ RespawnPawn->FinishSpawning(SpawnTransform);
 
  > 라인 트레이싱 공격 설계
 
-결론적으로 애니메이션의 프레임과 프레임 사이가 멀어도 어느정도 보간하여 충돌위치를 찾아낼 수있습니다.
+결론적으로 애니메이션의 프레임 간의 모션이 멀어도 위치를 보간하여 충돌위치를 찾아낼 수있습니다.
 
 **[⬆ Back to Top](#top)**
