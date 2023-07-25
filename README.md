@@ -237,16 +237,16 @@ void USrAIPerceptionComponent::HandleExpiredStimulus(FAIStimulus& StimulusStore)
 
 `멀티 세션 시스템`은 단순히 현재 프로젝트에만 사용하는데 그치지 않고 **범용적으로 사용**할 수 있도록 `플러그인`의 형태로 구현하였습니다.
 
+![세션의존성관계도](https://github.com/Naezan/Sicarius-Portfolio/blob/main/img/AI/세션의존성관계도.png?raw=true)
+
+ > OnlineGameInstanceSubsystem에 의존하고 있는 객체들
+
 <a name="게임모드-분리"></a>
 ### 로비와 게임의 게임모드 분리
 
 실제 게임에서 사용하는 게임모드와는 별개로 **Lobby**에 들어왔을때는 **게임의 로직과는 다른 구조로 로직이 구성되기 때문**에 세션게임모드와 컨트롤러를 별개로 생성하여 관리했습니다.
 
-![세션의존성관계도](https://github.com/Naezan/Sicarius-Portfolio/blob/main/img/AI/세션의존성관계도.png?raw=true)
-
- > OnlineGameInstanceSubsystem에 의존하고 있는 객체들
-
-그리고 세션을 통해 월드 이동시 컨트롤러의 Possess문제가 발생하여 연결을 끊고 재연결하는 `Non-SeamlessTravel`을 사용했습니다.
+그리고 세션에서 게임으로 이동할 때 `SeamlessTravel`사용시 간헐적으로 컨트롤러의 `Possess`문제가 발생하여 연결을 끊고 재연결하는 `Non-SeamlessTravel`로 변경하였습니다.
 
 **[⬆ Back to Top](#top)**
 
