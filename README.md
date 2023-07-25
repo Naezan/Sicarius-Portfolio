@@ -1,6 +1,7 @@
 # Sicarius-Portfolio
 
 Video Link : https://youtu.be/z4qN8cH2Qo4
+프로젝트 링크 : https://github.com/Naezan/Sicarius
 
 - 프로젝트 정보
   - 
@@ -154,8 +155,6 @@ RepeatTask = UAbilityTask_Repeat::RepeatAction(this, 0.1f, 50);
 시카리우스에서 인벤토리는 인덱스를 통해 UI에서 접근할수도 있어야 했습니다.
 그래서 인덱스 접근이 빠른 TArray로 구현하였습니다.
 
-**[⬆ Back to Top](#top)**
-
 장착 함수들은 서버를 통해서 진행되며 기존의 장비체크 후 장착해제, 해제한 슬롯에 장착할 장비를 착용합니다.
 
  - USrEquipmentSlotComponent.h
@@ -264,7 +263,7 @@ Styx : Shard of Darkness 게임에서 캐릭터가 사망 이후 특정 플레�
 관전 시점에서는 실제 게임의 모든 입력이 막혀야 하고 관전시점에서의 새로운 입력이 존재해야합니다.
 이를 근거로하여 관전용 새로운 입력맵핑을 만들었습니다.
 
-![관전입력값](https://github.com/Naezan/Sicarius/blob/main/img/Spectator/관전입력값.PNG?raw=true)
+![관전입력값](https://github.com/Naezan/Sicarius-Portfolio/blob/main/img/Spectator/관전입력값.PNG?raw=true)
 
  > 관전용 입력값들
 
@@ -311,10 +310,14 @@ RespawnPawn->FinishSpawning(SpawnTransform);
 <a name="linetracing-attack"></a>
 ## Extra : LineTracing Attack
 
-```cpp
-//TODO
-```
+간혹 공격 애니메이션이 너무 빠르거나 프레임저하로 인해 모션이 스킵되면 공격이 무시되는 문제가 발생했습니다.
+
+문제의 원인은 무기의 충돌체가 빠르게 움직이면서 판정을 무시하게 되는 것이였고 이 문제를 이전 소켓위치와 다음 소켓위치를 통한 라인 트레이싱 방법을 이용하여 해결했습니다.
+
+![라인트레이싱공격](https://github.com/Naezan/Sicarius-Portfolio/blob/main/img/Extra/라인트레이싱공격.png?raw=true)
+
+ > 라인 트레이싱 공격 설계
+
+결론적으로 애니메이션의 프레임과 프레임 사이가 멀어도 어느정도 보간하여 충돌위치를 찾아낼 수있습니다.
 
 **[⬆ Back to Top](#top)**
-
-프로젝트 링크(PDF용) : https://github.com/Naezan/Sicarius
