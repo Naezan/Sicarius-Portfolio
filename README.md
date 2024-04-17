@@ -2,6 +2,7 @@
 
 비디오 링크 : https://youtu.be/z4qN8cH2Qo4  
 프로젝트 링크 : https://github.com/Naezan/Sicarius  
+노션 링크 : https://rose-experience-136.notion.site/cf2a4bde570947cdbd5cb84890b5a02d?pvs=4  
 
 - 프로젝트 정보
   - 
